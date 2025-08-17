@@ -1,0 +1,39 @@
+medical-ai-platform/
+├── app/
+│   ├── api/
+│   │   ├── auth/
+│   │   │   ├── login/route.ts
+│   │   │   └── register/route.ts
+│   │   ├── predict/route.ts
+│   │   ├── predictions/history/route.ts
+│   │   └── analyze-report/route.ts
+│   ├── auth/
+│   │   ├── login/page.tsx
+│   │   └── register/page.tsx
+│   ├── components/
+│   │   ├── connection-status.tsx
+│   │   └── demo-banner.tsx
+│   ├── about/page.tsx
+│   ├── dashboard/page.tsx
+│   ├── predict/page.tsx
+│   ├── upload/page.tsx
+│   ├── layout.tsx
+│   ├── page.tsx
+│   └── globals.css
+├── components/ui/
+│   ├── card.tsx
+│   ├── button.tsx
+│   ├── input.tsx
+│   ├── textarea.tsx
+│   ├── select.tsx
+│   ├── badge.tsx
+│   ├── alert.tsx
+│   ├── progress.tsx
+│   ├── checkbox.tsx
+│   └── label.tsx
+├── lib/
+│   └── utils.ts
+├── .env.local
+├── package.json
+├── tailwind.config.js
+└── next.config.js

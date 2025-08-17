@@ -1,0 +1,1 @@
+# Symptoms app initialization

@@ -1,0 +1,133 @@
+version: '3.8'
+
+services:
+  # MongoDB Database
+  mongodb:
+    image: mongo:7.0
+    container_name: medai_mongodb
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USERNAME:-admin}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD:-password123}
+      MONGO_INITDB_DATABASE: ${MONGO_DB_NAME:-medai_db}
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+      - ./scripts/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    networks:
+      - medai_network
+
+  # Redis Cache (optional)
+  redis:
+    image: redis:7.2-alpine
+    container_name: medai_redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - medai_network
+
+  # Django Backend
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: medai_backend
+    restart: unless-stopped
+    environment:
+      - DEBUG=False
+      - SECRET_KEY=${SECRET_KEY}
+      - DATABASE_URL=mongodb://admin:password123@mongodb:27017/medai_db
+      - GROQ_API_KEY=${GROQ_API_KEY}
+      - REDIS_URL=redis://redis:6379/0
+      - ALLOWED_HOSTS=localhost,127.0.0.1,backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app/backend
+      - static_volume:/app/staticfiles
+      - media_volume:/app/media
+    depends_on:
+      - mongodb
+      - redis
+    networks:
+      - medai_network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Nginx Reverse Proxy
+  nginx:
+    image: nginx:1.25-alpine
+    container_name: medai_nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - static_volume:/app/staticfiles
+      - media_volume:/app/media
+      - ./ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - backend
+    networks:
+      - medai_network
+
+  # Celery Worker (optional for background tasks)
+  celery:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: medai_celery
+    restart: unless-stopped
+    command: celery -A medai worker -l info
+    environment:
+      - DEBUG=False
+      - SECRET_KEY=${SECRET_KEY}
+      - DATABASE_URL=mongodb://admin:password123@mongodb:27017/medai_db
+      - GROQ_API_KEY=${GROQ_API_KEY}
+      - REDIS_URL=redis://redis:6379/0
+    volumes:
+      - ./backend:/app/backend
+    depends_on:
+      - mongodb
+      - redis
+    networks:
+      - medai_network
+
+  # Celery Beat Scheduler (optional)
+  celery-beat:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: medai_celery_beat
+    restart: unless-stopped
+    command: celery -A medai beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
+    environment:
+      - DEBUG=False
+      - SECRET_KEY=${SECRET_KEY}
+      - DATABASE_URL=mongodb://admin:password123@mongodb:27017/medai_db
+      - REDIS_URL=redis://redis:6379/0
+    volumes:
+      - ./backend:/app/backend
+    depends_on:
+      - mongodb
+      - redis
+    networks:
+      - medai_network
+
+volumes:
+  mongodb_data:
+  redis_data:
+  static_volume:
+  media_volume:
+
+networks:
+  medai_network:
+    driver: bridge

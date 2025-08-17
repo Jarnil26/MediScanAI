@@ -1,0 +1,64 @@
+-- MongoDB equivalent operations for medical AI platform
+-- This would be implemented using MongoDB collections and indexes
+
+-- Users collection structure
+-- {
+--   "_id": ObjectId,
+--   "email": String,
+--   "password_hash": String,
+--   "first_name": String,
+--   "last_name": String,
+--   "date_joined": Date,
+--   "is_active": Boolean,
+--   "profile": {
+--     "age": Number,
+--     "gender": String,
+--     "medical_history": [String]
+--   }
+-- }
+
+-- Predictions collection structure
+-- {
+--   "_id": ObjectId,
+--   "user_id": ObjectId,
+--   "symptoms": [String],
+--   "additional_info": String,
+--   "predicted_diseases": [{
+--     "name": String,
+--     "probability": Number,
+--     "description": String
+--   }],
+--   "medications": [{
+--     "name": String,
+--     "dosage": String,
+--     "instructions": String
+--   }],
+--   "recommendations": [String],
+--   "urgency": String,
+--   "created_at": Date,
+--   "ai_model_used": String,
+--   "confidence_score": Number
+-- }
+
+-- Symptoms collection structure (reference data)
+-- {
+--   "_id": ObjectId,
+--   "name": String,
+--   "category": String,
+--   "severity_indicators": [String],
+--   "related_conditions": [String]
+-- }
+
+-- Create indexes for better performance
+-- db.users.createIndex({ "email": 1 }, { unique: true })
+-- db.predictions.createIndex({ "user_id": 1, "created_at": -1 })
+-- db.predictions.createIndex({ "symptoms": 1 })
+-- db.symptoms.createIndex({ "name": 1 }, { unique: true })
+-- db.symptoms.createIndex({ "category": 1 })
+
+-- Sample data insertion
+-- db.symptoms.insertMany([
+--   { "name": "Fever", "category": "General", "severity_indicators": ["high temperature", "chills"], "related_conditions": ["infection", "inflammation"] },
+--   { "name": "Headache", "category": "Neurological", "severity_indicators": ["severe pain", "vision changes"], "related_conditions": ["tension", "migraine", "cluster"] },
+--   { "name": "Cough", "category": "Respiratory", "severity_indicators": ["blood", "persistent"], "related_conditions": ["cold", "bronchitis", "pneumonia"] }
+-- ])

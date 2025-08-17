@@ -1,0 +1,29 @@
+0,bloodmnist_basophil
+1,bloodmnist_eosinophil
+2,bloodmnist_erythroblast
+3,bloodmnist_immature granulocytes(myelocytes, metamyelocytes and promyelocytes)
+4,bloodmnist_lymphocyte
+5,bloodmnist_monocyte
+6,bloodmnist_neutrophil
+7,bloodmnist_platelet
+8,breastmnist_malignant
+9,breastmnist_normal, benign
+10,pathmnist_adipose
+11,pathmnist_background
+12,pathmnist_debris
+13,pathmnist_lymphocytes
+14,pathmnist_mucus
+15,pathmnist_smooth muscle
+16,pathmnist_normal colon mucosa
+17,pathmnist_cancer-associated stroma
+18,pathmnist_colorectal adenocarcinoma epithelium
+19,pneumoniamnist_normal
+20,pneumoniamnist_pneumonia
+21,tissuemnist_Collecting Duct, Connecting Tubule
+22,tissuemnist_Distal Convoluted Tubule
+23,tissuemnist_Glomerular endothelial cells
+24,tissuemnist_Interstitial endothelial cells
+25,tissuemnist_Leukocytes
+26,tissuemnist_Podocytes
+27,tissuemnist_Proximal Tubule Segments
+28,tissuemnist_Thick Ascending Limb

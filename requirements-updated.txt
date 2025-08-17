@@ -1,0 +1,61 @@
+# Updated Django Backend Requirements for Medical AI Platform
+
+# Core Django
+Django
+djangorestframework
+django-cors-headers
+
+# MongoDB Integration
+mongoengine
+pymongo
+
+# Authentication and Security
+djangorestframework-simplejwt
+PyJWT
+cryptography
+
+# AI and ML
+groq
+scikit-learn
+numpy
+pandas
+joblib
+
+# Environment and Configuration
+python-decouple
+django-environ
+
+# Production Server
+gunicorn
+whitenoise
+
+# HTTP Requests
+requests
+httpx
+
+# Data Validation
+marshmallow
+pydantic
+
+# Development Tools
+django-debug-toolbar
+pytest-django
+factory-boy
+
+# API Documentation
+drf-spectacular
+
+# Monitoring and Logging
+sentry-sdk
+django-extensions
+
+# Caching (optional)
+redis
+django-redis
+
+# File Storage
+boto3
+django-storages
+
+# Image Processing
+Pillow
